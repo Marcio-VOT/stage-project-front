@@ -1,3 +1,6 @@
+import Image from 'next/image'
+import svg from '../../public/bxs-tag.svg'
+
 export default async function Home() {
   const data = await fetch('http://localhost:5000/area/alldata', {
     headers: {
@@ -7,10 +10,13 @@ export default async function Home() {
   })
     .then((res) => res.json())
     .catch((err) => console.log(err))
-  console.log(data)
   return (
     <main>
-      <h1>HELLO WORLD!</h1>
+      <h1 className="font-bold text-4xl">
+        HELLO WORLD! {process.env.TEST ?? 'n deu'}
+        <p>{process.env.TEST2 ?? 'n deu dnv'}</p>
+      </h1>
+      <Image src={svg} alt="svg" height={24} width={24} />
     </main>
   )
 }

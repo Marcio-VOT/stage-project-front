@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-br" className="light">
       <body
         className={`${roboto.variable} font-sans h-fit max-h-fit min-h-screen bg-zinc-200`}
       >

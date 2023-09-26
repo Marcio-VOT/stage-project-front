@@ -1,22 +1,72 @@
-import Image from 'next/image'
-import svg from '../../public/bxs-tag.svg'
+'use client'
+import useAllData from '@/hooks/useAllData'
+import { Accordion, AccordionItem } from '@nextui-org/react'
 
-export default async function Home() {
-  const data = await fetch('http://localhost:5000/area/alldata', {
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWFyY2lvLXZvdCIsImNwZiI6IjEwMzkwNDc1OTk4IiwiaWF0IjoxNjk1NTg5MTc1LCJleHAiOjE2OTYxOTM5NzUsImF1ZCI6InVzZXIiLCJpc3MiOiJzdGFnZS1jYXNlIiwic3ViIjoiNiJ9.5fUL5QjePSGtd4J-vu0MnShYrhcNbON4TNgfcLNccJk`,
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log(err))
+export default function Home() {
+  const { allData } = useAllData()
+  const itemClasses = {
+    base: 'py-0 w-full rounded-none',
+    title: 'font-normal text-2xl',
+    trigger:
+      'py-0 data-[hover=true]:bg-default-100 rounded-none h-14 flex items-center',
+    indicator: 'text-medium',
+    content: 'text-small',
+  }
+
   return (
-    <main>
-      <h1 className="font-bold text-4xl">
-        HELLO WORLD! {process.env.TEST ?? 'n deu'}
-        <p>{process.env.TEST2 ?? 'n deu dnv'}</p>
-      </h1>
-      <Image src={svg} alt="svg" height={24} width={24} />
+    <main className="w-full ">
+      <h1 className="text-4xl font-medium ps-2 pb-3">Areas</h1>
+      <Accordion
+        itemClasses={itemClasses}
+        className="flex flex-col gap-y-4 py-4 w-full rounded-none "
+        variant="shadow"
+        disableAnimation
+        key={'areas'}
+      >
+        {allData &&
+          allData.map((data, index) => {
+            return (
+              <AccordionItem
+                key={index + data.name}
+                aria-label={'Area'}
+                subtitle={'Process quantity: ' + data._count.Process}
+                title={data.name}
+              >
+                <h1 className="text-2xl font-medium ps-2 pb-3">Processes</h1>
+                <Accordion
+                  key={'processes'}
+                  itemClasses={itemClasses}
+                  className="flex flex-col gap-4 py-4 w-full rounded-none "
+                  variant="shadow"
+                  disableAnimation
+                >
+                  {data.Process &&
+                    data.Process.map((process, index) => (
+                      <AccordionItem
+                        key={process.name + index}
+                        aria-label={'Process'}
+                        subtitle={
+                          process.Stack.length +
+                          ' Stacks & ' +
+                          process.SubProcess.length +
+                          ' Subprocesses'
+                        }
+                        title={process.name}
+                      >
+                        <div>
+                          {process.Stack.length >= 1 && 'Satcks = | '}
+                          {process.Stack.length >= 1 &&
+                            process.Stack.map((stack) => (
+                              <>{stack.name + ' | '}</>
+                            ))}
+                        </div>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
+              </AccordionItem>
+            )
+          })}
+      </Accordion>
     </main>
   )
 }

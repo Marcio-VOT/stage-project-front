@@ -2,7 +2,7 @@
 const nextConfig = {
   output: 'standalone',
   env: {
-    TEST2: 'POUCA BATATA',
+    BACKEND_URL: 'http://localhost:5000',
   },
 }
 

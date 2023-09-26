@@ -1,16 +1,21 @@
-type Stack = {
-  id: number
+type Team = {
   name: string
 }
 
 type SubProcess = {
   id: number
   name: string
-  description?: string
+  description: string
   team_id: number
+  Team: Team
   _count: {
     Method: number
   }
+}
+
+type Stack = {
+  id: number
+  name: string
 }
 
 type Process = {
